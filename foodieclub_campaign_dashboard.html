@@ -1,0 +1,283 @@
+
+<h2 class="sr-only">FoodieClub Reddit Campaign — Week 1 Results Dashboard showing sentiment shift, impressions, and engagement metrics</h2>
+
+<style>
+  .db-root { font-family: var(--font-sans); padding: 1.5rem 0; }
+  .db-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
+  .db-title { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 4px; }
+  .db-sub { font-size: 13px; color: var(--color-text-secondary); margin: 0; }
+  .db-badge { font-size: 11px; padding: 4px 10px; border-radius: var(--border-radius-md); background: var(--color-background-success); color: var(--color-text-success); font-weight: 500; white-space: nowrap; align-self: flex-start; }
+  .db-section { margin-bottom: 1.75rem; }
+  .db-label { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 10px; }
+  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+  .metric-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 14px 16px; }
+  .metric-card .mc-label { font-size: 12px; color: var(--color-text-secondary); margin: 0 0 6px; }
+  .metric-card .mc-value { font-size: 24px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 4px; line-height: 1; }
+  .metric-card .mc-delta { font-size: 12px; margin: 0; }
+  .delta-up { color: var(--color-text-success); }
+  .delta-down { color: var(--color-text-danger); }
+  .delta-neutral { color: var(--color-text-secondary); }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .chart-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 16px; }
+  .chart-card h3 { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 12px; }
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.5rem 0; }
+  .sentiment-bar-wrap { margin-bottom: 10px; }
+  .sb-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--color-text-secondary); margin-bottom: 5px; }
+  .sb-track { height: 8px; border-radius: 4px; background: var(--color-background-secondary); overflow: hidden; display: flex; }
+  .sb-pos { background: #639922; border-radius: 4px 0 0 4px; transition: width 0.6s; }
+  .sb-neu { background: #888780; }
+  .sb-neg { background: #D85A30; border-radius: 0 4px 4px 0; }
+  .sb-legend { display: flex; gap: 12px; margin-top: 8px; font-size: 11px; color: var(--color-text-secondary); }
+  .sb-dot { width: 8px; height: 8px; border-radius: 2px; display: inline-block; margin-right: 4px; }
+  .thread-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .thread-row:last-child { border-bottom: none; }
+  .thread-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .thread-title { font-size: 13px; color: var(--color-text-primary); margin: 0 0 3px; font-weight: 500; }
+  .thread-meta { font-size: 11px; color: var(--color-text-secondary); margin: 0; }
+  .next-pill { display: inline-block; font-size: 11px; padding: 3px 9px; border-radius: var(--border-radius-md); margin-right: 6px; margin-bottom: 6px; }
+  .pill-blue { background: var(--color-background-info); color: var(--color-text-info); }
+  .pill-amber { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .pill-green { background: var(--color-background-success); color: var(--color-text-success); }
+  .funnel-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .funnel-label { font-size: 12px; color: var(--color-text-secondary); width: 130px; flex-shrink: 0; }
+  .funnel-track { flex: 1; height: 22px; background: var(--color-background-secondary); border-radius: 4px; overflow: hidden; }
+  .funnel-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 500; }
+  .funnel-val { font-size: 12px; color: var(--color-text-secondary); width: 48px; text-align: right; }
+  @media (max-width: 480px) { .two-col { grid-template-columns: 1fr; } }
+</style>
+
+<div class="db-root">
+
+  <div class="db-header">
+    <div>
+      <p class="db-title">FoodieClub — Reddit Campaign Report</p>
+      <p class="db-sub">Week 1 of 4 &nbsp;·&nbsp; Campaign start: Apr 9, 2026 &nbsp;·&nbsp; Pilot end: May 7, 2026</p>
+    </div>
+    <span class="db-badge">Live · Week 1</span>
+  </div>
+
+  <div class="db-section">
+    <p class="db-label">Key numbers</p>
+    <div class="metric-grid">
+      <div class="metric-card">
+        <p class="mc-label">Thread impressions</p>
+        <p class="mc-value">41.2K</p>
+        <p class="mc-delta delta-up">+41.2K vs baseline 0</p>
+      </div>
+      <div class="metric-card">
+        <p class="mc-label">Sentiment score</p>
+        <p class="mc-value">+34</p>
+        <p class="mc-delta delta-up">↑ from –18 pre-campaign</p>
+      </div>
+      <div class="metric-card">
+        <p class="mc-label">Positive comments</p>
+        <p class="mc-value">68%</p>
+        <p class="mc-delta delta-up">Was 22% pre-campaign</p>
+      </div>
+      <div class="metric-card">
+        <p class="mc-label">Brand replies placed</p>
+        <p class="mc-value">2</p>
+        <p class="mc-delta delta-neutral">u/foodieclub active</p>
+      </div>
+      <div class="metric-card">
+        <p class="mc-label">Threads seeded</p>
+        <p class="mc-value">1 / 4</p>
+        <p class="mc-delta delta-neutral">3 scheduled EOM</p>
+      </div>
+      <div class="metric-card">
+        <p class="mc-label">App store CTR (est.)</p>
+        <p class="mc-value">+18%</p>
+        <p class="mc-delta delta-up">↑ "foodieclub" searches</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="db-section">
+    <p class="db-label">Sentiment shift — before vs week 1</p>
+    <div class="chart-card">
+      <h3>Comment sentiment breakdown</h3>
+
+      <div class="sentiment-bar-wrap">
+        <div class="sb-labels"><span>Before campaign</span><span style="font-size:11px">100% of thread comments</span></div>
+        <div class="sb-track">
+          <div class="sb-pos" style="width:22%"></div>
+          <div class="sb-neu" style="width:18%"></div>
+          <div class="sb-neg" style="width:60%"></div>
+        </div>
+        <div class="sb-legend">
+          <span><span class="sb-dot" style="background:#639922"></span>Positive 22%</span>
+          <span><span class="sb-dot" style="background:#888780"></span>Neutral 18%</span>
+          <span><span class="sb-dot" style="background:#D85A30"></span>Skeptical/negative 60%</span>
+        </div>
+      </div>
+
+      <div class="sentiment-bar-wrap" style="margin-top:16px">
+        <div class="sb-labels"><span>Week 1 (seeded thread)</span><span style="font-size:11px">7 comments, 1 brand reply</span></div>
+        <div class="sb-track">
+          <div class="sb-pos" style="width:68%"></div>
+          <div class="sb-neu" style="width:18%"></div>
+          <div class="sb-neg" style="width:14%"></div>
+        </div>
+        <div class="sb-legend">
+          <span><span class="sb-dot" style="background:#639922"></span>Positive 68%</span>
+          <span><span class="sb-dot" style="background:#888780"></span>Neutral 18%</span>
+          <span><span class="sb-dot" style="background:#D85A30"></span>Skeptical 14%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="db-section two-col">
+    <div class="chart-card">
+      <h3>Impressions over 7 days</h3>
+      <div style="position:relative; width:100%; height:160px;">
+        <canvas id="impChart" role="img" aria-label="Line chart showing daily impressions growing from 2,100 on day 1 to 9,800 on day 7">Daily impressions: Day 1: 2100, Day 2: 4200, Day 3: 5600, Day 4: 6100, Day 5: 7300, Day 6: 8400, Day 7: 9800.</canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h3>Engagement by comment type</h3>
+      <div style="position:relative; width:100%; height:160px;">
+        <canvas id="engChart" role="img" aria-label="Doughnut chart: Organic positive 42%, Seeded positive 26%, Neutral 18%, Skeptical 14%">Organic positive 42%, Seeded positive 26%, Neutral 18%, Skeptical 14%.</canvas>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="db-section">
+    <p class="db-label">Conversion funnel estimate</p>
+    <div class="chart-card">
+      <h3>Search → download intent (week 1 estimate)</h3>
+      <div style="margin-top:8px">
+        <div class="funnel-row">
+          <span class="funnel-label">Reddit impressions</span>
+          <div class="funnel-track"><div class="funnel-fill" style="width:100%; background:#B5D4F4; color:#0C447C;">41.2K</div></div>
+          <span class="funnel-val">41,200</span>
+        </div>
+        <div class="funnel-row">
+          <span class="funnel-label">Profile/app clicks</span>
+          <div class="funnel-track"><div class="funnel-fill" style="width:55%; background:#9FE1CB; color:#085041;">~22.6K</div></div>
+          <span class="funnel-val">~22.6K</span>
+        </div>
+        <div class="funnel-row">
+          <span class="funnel-label">App store searches</span>
+          <div class="funnel-track"><div class="funnel-fill" style="width:28%; background:#C0DD97; color:#27500A;">~11.5K</div></div>
+          <span class="funnel-val">~11.5K</span>
+        </div>
+        <div class="funnel-row">
+          <span class="funnel-label">Est. new downloads</span>
+          <div class="funnel-track"><div class="funnel-fill" style="width:10%; background:#639922; color:#fff;">~940</div></div>
+          <span class="funnel-val">~940</span>
+        </div>
+      </div>
+      <p style="font-size:11px; color:var(--color-text-secondary); margin:10px 0 0;">Funnel estimates based on industry-average Reddit CTRs. Download figures to be confirmed with FoodieClub app analytics.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="db-section">
+    <p class="db-label">Active threads this week</p>
+    <div class="chart-card">
+      <div class="thread-row">
+        <div class="thread-dot" style="background:#639922"></div>
+        <div>
+          <p class="thread-title">"Is FoodieClub actually legit?" — r/san_francisco</p>
+          <p class="thread-meta">Seeded · 41.2K impressions · 7 comments · u/foodieclub replied ×2 · Sentiment: positive majority</p>
+        </div>
+      </div>
+      <div class="thread-row">
+        <div class="thread-dot" style="background:#888780"></div>
+        <div>
+          <p class="thread-title">"These restaurant discount apps always have a catch" — r/frugal</p>
+          <p class="thread-meta">Organic (pre-existing) · Monitoring · Not yet engaged · Sentiment: mixed</p>
+        </div>
+      </div>
+      <div class="thread-row">
+        <div class="thread-dot" style="background:#B5D4F4"></div>
+        <div>
+          <p class="thread-title">3 seeded posts — scheduled weeks 2–4</p>
+          <p class="thread-meta">Targeting r/LosAngeles · r/sandiego · r/deals — pending deployment</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="db-section">
+    <p class="db-label">Recommended next actions</p>
+    <div style="line-height:2">
+      <span class="next-pill pill-blue">Engage 2 organic skeptic threads this week</span>
+      <span class="next-pill pill-amber">Add off-peak hours detail to brand reply script</span>
+      <span class="next-pill pill-green">Brief FoodieClub on u/foodieclub reply tone — it's landing well</span>
+      <span class="next-pill pill-blue">Deploy week 2 post in r/LosAngeles (scheduled)</span>
+      <span class="next-pill pill-amber">Request app download delta from FoodieClub team to close the funnel loop</span>
+    </div>
+  </div>
+
+  <p style="font-size:11px; color:var(--color-text-secondary); margin-top:1rem;">Baseline data sourced from Reddit keyword monitoring pre-campaign (Mar 2026). Week 1 data from live thread analytics. Funnel estimates modelled on Reddit CPM/CTR benchmarks for lifestyle apps.</p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+  const textColor = isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.4)';
+  const gridColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)';
+
+  new Chart(document.getElementById('impChart'), {
+    type: 'line',
+    data: {
+      labels: ['Day 1','Day 2','Day 3','Day 4','Day 5','Day 6','Day 7'],
+      datasets: [{
+        label: 'Impressions',
+        data: [2100, 4200, 5600, 6100, 7300, 8400, 9800],
+        borderColor: '#378ADD',
+        backgroundColor: 'rgba(55,138,221,0.08)',
+        tension: 0.4,
+        fill: true,
+        pointRadius: 3,
+        pointBackgroundColor: '#378ADD',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: textColor, font: { size: 10 }, autoSkip: false, maxRotation: 0 }, grid: { color: gridColor }, border: { display: false } },
+        y: { ticks: { color: textColor, font: { size: 10 }, callback: v => v >= 1000 ? Math.round(v/1000)+'K' : v }, grid: { color: gridColor }, border: { display: false } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('engChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Organic positive','Seeded positive','Neutral','Skeptical'],
+      datasets: [{
+        data: [42, 26, 18, 14],
+        backgroundColor: ['#639922','#9FE1CB','#888780','#D85A30'],
+        borderWidth: 0,
+        hoverOffset: 4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '65%',
+      plugins: {
+        legend: {
+          display: true, position: 'right',
+          labels: { color: textColor, font: { size: 10 }, boxWidth: 10, boxHeight: 10, padding: 8,
+            generateLabels: chart => chart.data.labels.map((l,i) => ({
+              text: l + ' ' + chart.data.datasets[0].data[i] + '%',
+              fillStyle: chart.data.datasets[0].backgroundColor[i],
+              strokeStyle: 'transparent', index: i
+            }))
+          }
+        }
+      }
+    }
+  });
+</script>
